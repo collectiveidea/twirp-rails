@@ -16,7 +16,6 @@ require_relative "rails/configuration"
 require_relative "rails/dispatcher"
 require_relative "rails/handler"
 require_relative "rails/rack/conditional_post"
-require_relative "rails/routing"
 
 # Require any _twirp.rb files in lib
 # Dir.glob(Rails.root.join("lib", "*_twirp.rb")).each { |file| require file }
@@ -41,8 +40,6 @@ module Twirp
 
       initializer "twirp_rails_engine.add_middleware" do |app|
         app.middleware.insert_after ::Rack::ConditionalGet, Twirp::Rails::Rack::ConditionalPost
-
-        ActionDispatch::Routing::Mapper.include Twirp::Rails::Routing::Helper
       end
     end
 
