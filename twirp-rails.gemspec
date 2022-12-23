@@ -5,8 +5,8 @@ require_relative "lib/twirp/rails/version"
 Gem::Specification.new do |spec|
   spec.name = "twirp-rails"
   spec.version = Twirp::Rails::VERSION
-  spec.authors = ["Daniel Morrison"]
-  spec.email = ["daniel@collectiveidea.com"]
+  spec.authors = ["Daniel Morrison", "Darron Schall"]
+  spec.email = ["info@collectiveidea.com"]
 
   spec.summary = "TODO: Write a short summary, because RubyGems requires one."
   spec.description = "TODO: Write a longer description or delete this line."
