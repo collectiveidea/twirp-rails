@@ -10,6 +10,7 @@ module Twirp
 end
 
 require "rails/engine"
+require "rack/etag"
 require "twirp"
 require_relative "rails/callbacks"
 require_relative "rails/configuration"
@@ -37,10 +38,8 @@ module Twirp
       # endpoint MyRackApplication
       # # Add a load path for this specific Engine
       # config.autoload_paths << File.expand_path("lib/some/path", __dir__)
-
-      initializer "twirp_rails_engine.add_middleware" do |app|
-        app.middleware.insert_after ::Rack::ConditionalGet, Twirp::Rails::Rack::ConditionalPost
-      end
+      middleware.use Twirp::Rails::Rack::ConditionalPost
+      middleware.use ::Rack::ETag
     end
 
     class << self
