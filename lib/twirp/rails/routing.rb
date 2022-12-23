@@ -13,5 +13,3 @@ module Twirp
     end
   end
 end
-
-ActionDispatch::Routing::Mapper.include Twirp::Rails::Routing::Helper

@@ -1,3 +1,7 @@
+require "active_support/concern"
+require "active_support/callbacks"
+require "abstract_controller/callbacks"
+
 module Twirp
   module Rails
     # = Twirp Rails Callbacks

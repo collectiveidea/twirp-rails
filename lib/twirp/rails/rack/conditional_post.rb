@@ -1,3 +1,5 @@
+require "rack/conditional_get"
+
 module Twirp
   module Rails
     module Rack
