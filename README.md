@@ -6,6 +6,8 @@ Make serving a Twirp RPC Services as easy and familiar as Rails controllers. Add
 
 Out of the box, the `twirp` gem makes it easy to add services, but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-feautured APIs. Hook in authorization, `before_action` and more.
 
+Extracted from a real, production application with many thousands of users.
+
 ## Features
 
 ### Easy Routing
