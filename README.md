@@ -4,7 +4,7 @@
 
 Make serving a Twirp RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
 
-Out of the box, the `twirp` gem makes it easy to add services, but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-feautured APIs. Hook in authorization, `before_action` and more.
+Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add Services, but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, `before_action` and more.
 
 Extracted from a real, production application with many thousands of users.
 
@@ -50,6 +50,8 @@ mount Twirp::Rails::Engine, at: "/twirp"
 
 ## TODO
 
+* More docs!
+* Tests!
 * installer generator to add `ApplicationHandler`
 ** Maybe a generator for individual handlers that adds that if needed?
 * Autoload `lib/*_twirp.rb` files.
