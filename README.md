@@ -67,13 +67,14 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Prior Art
 
-We evaluated all these projects and found them to be bad fits for me, for one reason or another. We're grateful to all for their work, and hope they continue and flourish. Some notes from our initial evaluation:
+We evaluated all these projects and found them to be bad fits for us, for one reason or another. We're grateful to all for their work, and hope they continue and flourish. Some notes from our initial evaluation:
 
 [nikushi/twirp-rails](https://github.com/nikushi/twirp-rails)
 
 * Nice routing abstraction
 * Minimal Handler abstraction
 * Untouched for 4 years
+* Special thanks to [@nikushi](https://github.com/nikushi) for allowing us to take over the [`twirp-rails` gem](http://rubygems.org/gems/twirp-rails) name ( v0.1.1 was this code). Thanks for your inspiration!
 
 [cheddar-me/rails-twirp](https://github.com/cheddar-me/rails-twirp)
 
