@@ -40,6 +40,16 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
     $ gem install twirp-rails
 
+## Bonus Features
+
+Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.   
+
+### Basic Caching with ETags/If-None-Match Headers
+
+Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) based on the response's content. 
+
+If you have RPCs can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches. 
+
 ## Usage
 
 Add to your `routes.rb`:
