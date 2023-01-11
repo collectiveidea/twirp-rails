@@ -8,6 +8,24 @@ Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it 
 
 Extracted from a real, production application with many thousands of users.
 
+## Installation
+
+Install the gem and add to the application's Gemfile by executing:
+
+    $ bundle add twirp-rails
+
+If bundler is not being used to manage dependencies, install the gem by executing:
+
+    $ gem install twirp-rails
+
+## Usage
+
+Add to your `routes.rb`:
+
+```ruby
+mount Twirp::Rails::Engine, at: "/twirp"
+```
+
 ## Features
 
 ### Easy Routing
@@ -30,16 +48,6 @@ Use `before_action`, `around_action`, and other callbacks you're used to, as we 
 
 Apply [Service Hooks](https://github.com/twitchtv/twirp-ruby/wiki/Service-Hooks) one time across multiple services.
 
-## Installation
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add twirp-rails
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install twirp-rails
-
 ## Bonus Features
 
 Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.   
@@ -50,13 +58,6 @@ Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://devel
 
 If you have RPCs can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches. 
 
-## Usage
-
-Add to your `routes.rb`:
-
-```ruby
-mount Twirp::Rails::Engine, at: "/twirp"
-```
 
 ## TODO
 
@@ -67,13 +68,6 @@ mount Twirp::Rails::Engine, at: "/twirp"
 * Autoload `lib/*_twirp.rb` files.
 ** Make this location an easy config change
 * Make service hooks more configurable? Apply to one service instead of all?
-
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Prior Art
 
@@ -105,6 +99,12 @@ We evaluated all these projects and found them to be bad fits for us, for one re
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/danielmorrison/twirp-rails.
+
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## License
 
