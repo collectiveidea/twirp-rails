@@ -40,6 +40,28 @@ mount Twirp::Rails::Engine, at: "/twirp"
 
 These are routed to Handlers in `app/handlers/` based on expected naming conventions.
 
+For example if you have this service defined: 
+
+```
+service HaberdasherService {
+   rpc MakeHat(Size) returns (Hat);
+ }
+```
+
+it will expect to find `app/handlers/haberdasher_service_handler.rb` with a `make_hat` method. 
+
+```ruby
+class HaberdasherServiceHandler < Twirp::Rails::Handler
+  def make_hat
+
+  end
+end
+```
+
+Each handler method should return the appropriate Protobuf, or a `Twirp::Error`.
+
+TODO: Give more examples of both
+
 ### Familiar Callbacks
 
 Use `before_action`, `around_action`, and other callbacks you're used to, as we build on [AbstractController::Callbacks](https://api.rubyonrails.org/classes/AbstractController/Callbacks.html).
@@ -62,7 +84,7 @@ If you have RPCs can be cached, you can have your Twirp clients send an [`If-Non
 ## TODO
 
 * More docs!
-* Tests!
+* More tests!
 * installer generator to add `ApplicationHandler`
 ** Maybe a generator for individual handlers that adds that if needed?
 * Autoload `lib/*_twirp.rb` files.
