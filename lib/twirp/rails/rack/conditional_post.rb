@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rack/conditional_get"
 
 module Twirp
