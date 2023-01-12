@@ -83,15 +83,15 @@ We evaluated all these projects and found them to be bad fits for us, for one re
 [cheddar-me/rails-twirp](https://github.com/cheddar-me/rails-twirp)
 
 * Too much setup.
-* Nice controllers, but expects you to use their (pbbuilder)[https://github.com/cheddar-me/pbbuilder] which I find unnecessary.
+* Nice controllers, but expects you to use their [pbbuilder](https://github.com/cheddar-me/pbbuilder) which I find unnecessary.
 
-(severgroup-tt/twirp_rails-1)[https://github.com/severgroup-tt/twirp_rails-1]
+[severgroup-tt/twirp_rails-1](https://github.com/severgroup-tt/twirp_rails-1)
 
 * Some nice things
 * No Handler abstractions
 * Archived and not touched for 3 years
 
-(dudo/rails_respond_to_pb)[https://github.com/dudo/rails_respond_to_pb]
+[dudo/rails_respond_to_pb](https://github.com/dudo/rails_respond_to_pb)
 
 * Allows routing to existing controllers
 * I dislike the `respond_to` stuff. That shouldn't be something you think about. We have a better way to do that in other recent apps anyway.
