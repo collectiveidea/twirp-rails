@@ -3,7 +3,9 @@
 /_yardoc/
 /coverage/
 /doc/
+Gemfile.lock
 /pkg/
+/spec/rails_app/log/
 /spec/reports/
 /tmp/
 
