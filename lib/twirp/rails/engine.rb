@@ -17,9 +17,12 @@ module Twirp
 
     class << self
       def configure
+        yield configuration if block_given?
+        configuration
+      end
+
+      def configuration
         @configuration ||= Configuration.new
-        yield @configuration if block_given?
-        @configuration
       end
 
       def services
@@ -28,7 +31,7 @@ module Twirp
 
           # Install hooks that may be defined in the config
           @services.each do |service|
-            @configuration.service_hooks.each do |hook_name, hook|
+            configuration.service_hooks.each do |hook_name, hook|
               service.send(hook_name, &hook)
             end
           end
