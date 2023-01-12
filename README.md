@@ -1,3 +1,6 @@
+[![CI](https://github.com/collectiveidea/twirp-rails/actions/workflows/ci.yml/badge.svg)](https://github.com/collectiveidea/twirp-rails/actions/workflows/ci.yml)
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
+
 # Twirp::Rails
 
 ## Motivation
