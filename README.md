@@ -93,6 +93,7 @@ If you have RPCs can be cached, you can have your Twirp clients send an [`If-Non
 * Autoload `lib/*_twirp.rb` files.
 ** Make this location an easy config change
 * Make service hooks more configurable? Apply to one service instead of all?
+* Loosen Rails version requirement? Probably works, but haven't tested. 
 
 ## Prior Art
 
