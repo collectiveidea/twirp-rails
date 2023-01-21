@@ -8,8 +8,13 @@ module Twirp
       # for available hooks
       attr_accessor :service_hooks
 
+      # An array of directories to search for *_twirp.rb files
+      # Defaults to ["lib"]
+      attr_accessor :load_paths
+
       def initialize
         @service_hooks = {}
+        @load_paths = ["lib"]
       end
     end
   end
