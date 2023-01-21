@@ -5,9 +5,9 @@
 
 ## Motivation
 
-Make serving a Twirp RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
+Make serving a [Twirp](https://twitchtv.github.io/twirp/) RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
 
-Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add Services, but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, `before_action` and more.
+Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, `before_action` and more.
 
 Extracted from a real, production application with many thousands of users.
 
@@ -72,6 +72,20 @@ Use `before_action`, `around_action`, and other callbacks you're used to, as we 
 ### DRY Service Hooks
 
 Apply [Service Hooks](https://github.com/twitchtv/twirp-ruby/wiki/Service-Hooks) one time across multiple services.
+
+For example, we can add hooks in an initializer: 
+
+```ruby
+Twirp::Rails.configure do |config|
+  # Make IP address accessible to the handlers
+  config.service_hooks[:before] = lambda do |rack_env, env|
+    env[:ip] = rack_env["REMOTE_ADDR"]
+  end
+
+  # Send exceptions to Honeybadger
+  config.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
+end
+```
 
 ## Bonus Features
 
