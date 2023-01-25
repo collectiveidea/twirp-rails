@@ -29,6 +29,16 @@ Add to your `routes.rb`:
 mount Twirp::Rails::Engine, at: "/twirp"
 ```
 
+### Configuration
+
+Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/` directory. To modify the location, add this to an initializer: 
+
+```ruby 
+Twirp::Rails.configure do |config|
+  config.load_paths = ["lib", "app/twirp"]
+end
+```
+
 ## Features
 
 ### Easy Routing
@@ -104,8 +114,6 @@ If you have RPCs can be cached, you can have your Twirp clients send an [`If-Non
 * More tests!
 * installer generator to add `ApplicationHandler`
 ** Maybe a generator for individual handlers that adds that if needed?
-* Autoload `lib/*_twirp.rb` files.
-** Make this location an easy config change
 * Make service hooks more configurable? Apply to one service instead of all?
 * Loosen Rails version requirement? Probably works, but haven't tested. 
 

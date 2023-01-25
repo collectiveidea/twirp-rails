@@ -27,6 +27,10 @@ module Twirp
 
       def services
         if @services.nil?
+          configuration.load_paths.each do |directory|
+            Dir.glob(::Rails.root.join(directory, "*_twirp.rb")).sort.each { |file| require file }
+          end
+
           @services = Twirp::Service.subclasses.map(&:new)
 
           # Install hooks that may be defined in the config
