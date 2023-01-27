@@ -12,9 +12,14 @@ module Twirp
       # Defaults to ["lib"]
       attr_accessor :load_paths
 
+      # An array of rack middleware to use in the Twirp::Rails::Engine.
+      # Engines skip the default Rails middleware.
+      attr_accessor :middleware
+
       def initialize
         @service_hooks = {}
         @load_paths = ["lib"]
+        @middleware = []
       end
     end
   end

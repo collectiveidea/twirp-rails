@@ -101,6 +101,15 @@ end
 
 Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.   
 
+### Add Middleware
+
+As a Rails Engine, we skip all the Rack middleware that Rails adds. That's great for speed, but we make it easy to add your own:
+
+Twirp::Rails.configure do |config|
+  config.middleware = [Rack::Runtime]
+end
+```
+
 ### Basic Caching with ETags/If-None-Match Headers
 
 Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) based on the response's content. 
