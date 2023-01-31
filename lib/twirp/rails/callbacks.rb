@@ -40,6 +40,7 @@ module Twirp
           terminator: ->(controller, result_lambda) {
             # save off the error and terminate if a callback returns a Twirp::Error
             result = result_lambda.call
+
             if result.is_a?(Twirp::Error)
               controller.error = result
               true

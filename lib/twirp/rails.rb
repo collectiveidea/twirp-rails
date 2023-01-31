@@ -10,6 +10,7 @@ module Twirp
 end
 
 require "twirp"
+require "active_support/notifications"
 require_relative "rails/callbacks"
 require_relative "rails/configuration"
 require_relative "rails/dispatcher"

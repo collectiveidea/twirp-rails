@@ -41,4 +41,39 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
     end
   end
+
+  describe "notifications" do
+    before do
+      @events = []
+      @subscriber = ActiveSupport::Notifications.subscribe(/twirp_rails/) do |*args|
+        @events << ActiveSupport::Notifications::Event.new(*args)
+      end
+    end
+
+    after do
+      ActiveSupport::Notifications.unsubscribe(@subscriber)
+    end
+
+    it "publishes ActiveSupport::Notifications for the handler" do
+      make_hat_success_request
+
+      expect(@events).to contain_exactly(
+        have_attributes(name: "handler_run.twirp_rails",
+          payload: {
+            handler: an_instance_of(HaberdasherHandler),
+            env: an_instance_of(Hash),
+            request: an_instance_of(Twirp::Example::Haberdasher::Size)
+          }),
+        have_attributes(name: "handler_run_callbacks.twirp_rails",
+          payload: {
+            handler: an_instance_of(HaberdasherHandler),
+            env: an_instance_of(Hash),
+            request: an_instance_of(Twirp::Example::Haberdasher::Size)
+          })
+      )
+
+      # In order that events were initialized
+      expect(@events.sort_by(&:time).map(&:name)).to contain_exactly("handler_run.twirp_rails", "handler_run_callbacks.twirp_rails")
+    end
+  end
 end
