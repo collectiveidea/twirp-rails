@@ -86,7 +86,7 @@ For example, we can add hooks in an initializer:
 
 ```ruby
 # Make IP address accessible to the handlers
-Rails.application.config.service_hooks[:before] = lambda do |rack_env, env|
+Rails.application.config.twirp.service_hooks[:before] = lambda do |rack_env, env|
   env[:ip] = rack_env["REMOTE_ADDR"]
 end
 
