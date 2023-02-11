@@ -16,9 +16,6 @@ require_relative "rails/dispatcher"
 require_relative "rails/engine"
 require_relative "rails/handler"
 
-# Require any _twirp.rb files in lib
-# Dir.glob(Rails.root.join("lib", "*_twirp.rb")).each { |file| require file }
-
 module Twirp
   class Service
     # Override initialize to make handler argument optional.

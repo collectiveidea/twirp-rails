@@ -34,8 +34,7 @@ mount Twirp::Rails::Engine, at: "/twirp"
 Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/` directory. To modify the location, add this to an initializer: 
 
 ```ruby 
-Twirp::Rails.configure do |config|
-  config.load_paths = ["lib", "app/twirp"]
+Rails.application.config.load_paths = ["lib", "app/twirp"]
 end
 ```
 
@@ -86,15 +85,13 @@ Apply [Service Hooks](https://github.com/twitchtv/twirp-ruby/wiki/Service-Hooks)
 For example, we can add hooks in an initializer: 
 
 ```ruby
-Twirp::Rails.configure do |config|
-  # Make IP address accessible to the handlers
-  config.service_hooks[:before] = lambda do |rack_env, env|
-    env[:ip] = rack_env["REMOTE_ADDR"]
-  end
-
-  # Send exceptions to Honeybadger
-  config.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
+# Make IP address accessible to the handlers
+Rails.application.config.service_hooks[:before] = lambda do |rack_env, env|
+  env[:ip] = rack_env["REMOTE_ADDR"]
 end
+
+# Send exceptions to Honeybadger
+Rails.application.config.twirp.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
 ```
 
 ## Bonus Features
