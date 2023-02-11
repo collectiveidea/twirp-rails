@@ -27,7 +27,6 @@ module Twirp
         end
 
         app.config.twirp.middleware.each do |middleware|
-          puts "using #{middleware}"
           app.config.middleware.use middleware
         end
       end
