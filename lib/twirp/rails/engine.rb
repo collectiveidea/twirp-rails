@@ -7,6 +7,7 @@ require_relative "rack/conditional_post"
 module Twirp
   module Rails
     class Engine < ::Rails::Engine
+      isolate_namespace Twirp::Rails
       engine_name "twirp"
       # endpoint MyRackApplication
       # # Add a load path for this specific Engine
