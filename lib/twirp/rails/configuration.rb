@@ -3,8 +3,11 @@
 module Twirp
   module Rails
     class Configuration
-      # Whether to automatically mount routes at /twirp
+      # Whether to automatically mount routes at endpoint. Defaults to false
       attr_accessor :auto_mount
+
+      # Where to mount twirp routes. Defaults to /twirp
+      attr_accessor :endpoint
 
       # An array of directories to search for *_twirp.rb files
       # Defaults to ["lib"]
@@ -20,6 +23,7 @@ module Twirp
 
       def initialize
         @auto_mount = false
+        @endpoint = "/twirp"
         @load_paths = ["lib"]
         @middleware = []
         @service_hooks = {}

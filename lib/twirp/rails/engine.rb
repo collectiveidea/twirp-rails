@@ -24,7 +24,7 @@ module Twirp
       end
 
       initializer "twirp.configure" do |app|
-        [:middleware, :service_hooks, :load_paths].each do |key|
+        [:auto_mount, :endpoint, :load_paths, :middleware, :service_hooks].each do |key|
           app.config.twirp.send(key)
         end
       end
