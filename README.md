@@ -94,6 +94,14 @@ end
 Rails.application.config.twirp.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
 ```
 
+### Middleware
+
+As an Engine, we avoid all the standard Rails middleware. That's nice for simplicity, but sometimes you want to add your own middleware. You can do that by specifying it in an initializer:
+
+```ruby
+Rails.application.config.twirp.middleware = [Rack::Deflater]
+```
+
 ## Bonus Features
 
 Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.   
@@ -104,6 +112,14 @@ Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://devel
 
 If you have RPCs can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches. 
 
+Enable by adding this to an initializer: 
+
+```ruby
+Rails.application.config.twirp.middleware = [
+  Twirp::Rails::Rack::ConditionalPost,
+  Rack::ETag
+]
+```
 
 ## TODO
 

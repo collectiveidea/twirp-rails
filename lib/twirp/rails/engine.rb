@@ -12,8 +12,6 @@ module Twirp
       # endpoint MyRackApplication
       # # Add a load path for this specific Engine
       # config.autoload_paths << File.expand_path("lib/some/path", __dir__)
-      # middleware.use Twirp::Rails::Rack::ConditionalPost
-      # middleware.use ::Rack::ETag
 
       config.twirp = Configuration.new
 
@@ -26,6 +24,11 @@ module Twirp
       initializer "twirp.configure" do |app|
         [:auto_mount, :endpoint, :load_paths, :middleware, :service_hooks].each do |key|
           app.config.twirp.send(key)
+        end
+
+        app.config.twirp.middleware.each do |middleware|
+          puts "using #{middleware}"
+          app.config.middleware.use middleware
         end
       end
     end
