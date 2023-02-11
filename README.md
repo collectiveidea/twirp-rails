@@ -34,8 +34,7 @@ mount Twirp::Rails::Engine, at: "/twirp"
 Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/` directory. To modify the location, add this to an initializer: 
 
 ```ruby 
-Twirp::Rails.configure do |config|
-  config.load_paths = ["lib", "app/twirp"]
+Rails.application.config.load_paths = ["lib", "app/twirp"]
 end
 ```
 
@@ -86,15 +85,21 @@ Apply [Service Hooks](https://github.com/twitchtv/twirp-ruby/wiki/Service-Hooks)
 For example, we can add hooks in an initializer: 
 
 ```ruby
-Twirp::Rails.configure do |config|
-  # Make IP address accessible to the handlers
-  config.service_hooks[:before] = lambda do |rack_env, env|
-    env[:ip] = rack_env["REMOTE_ADDR"]
-  end
-
-  # Send exceptions to Honeybadger
-  config.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
+# Make IP address accessible to the handlers
+Rails.application.config.twirp.service_hooks[:before] = lambda do |rack_env, env|
+  env[:ip] = rack_env["REMOTE_ADDR"]
 end
+
+# Send exceptions to Honeybadger
+Rails.application.config.twirp.service_hooks[:exception_raised] = ->(exception, _env) { Honeybadger.notify(exception) }
+```
+
+### Middleware
+
+As an Engine, we avoid all the standard Rails middleware. That's nice for simplicity, but sometimes you want to add your own middleware. You can do that by specifying it in an initializer:
+
+```ruby
+Rails.application.config.twirp.middleware = [Rack::Deflater]
 ```
 
 ## Bonus Features
@@ -107,6 +112,14 @@ Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://devel
 
 If you have RPCs can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches. 
 
+Enable by adding this to an initializer: 
+
+```ruby
+Rails.application.config.twirp.middleware = [
+  Twirp::Rails::Rack::ConditionalPost,
+  Rack::ETag
+]
+```
 
 ## TODO
 

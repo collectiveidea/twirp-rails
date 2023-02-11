@@ -3,7 +3,6 @@
 ENV["RAILS_ENV"] = "test"
 require "bundler/setup"
 
-require "twirp/rails"
 require "rails_app/config/environment"
 require "rspec/rails"
 
