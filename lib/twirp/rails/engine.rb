@@ -36,7 +36,7 @@ module Twirp
       def services
         if @services.nil?
           ::Rails.application.config.twirp.load_paths.each do |directory|
-            Dir.glob(::Rails.root.join(directory, "*_twirp.rb")).sort.each { |file| require file }
+            Dir.glob(::Rails.root.join(directory, "**", "*_twirp.rb")).sort.each { |file| require file }
           end
 
           @services = Twirp::Service.subclasses.map(&:new)
