@@ -31,7 +31,7 @@ mount Twirp::Rails::Engine, at: "/twirp"
 
 ### Configuration
 
-Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/` directory. To modify the location, add this to an initializer: 
+Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/` directory (and subdirectories). To modify the location, add this to an initializer: 
 
 ```ruby 
 Rails.application.config.load_paths = ["lib", "app/twirp"]
