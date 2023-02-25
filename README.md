@@ -35,7 +35,6 @@ Twirp::Rails will automatically load any `*_twirp.rb` files in your app's `lib/`
 
 ```ruby 
 Rails.application.config.load_paths = ["lib", "app/twirp"]
-end
 ```
 
 ## Features
