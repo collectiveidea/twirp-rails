@@ -126,7 +126,8 @@ Rails.application.config.twirp.middleware = [
 * More docs!
 * More tests!
 * installer generator to add `ApplicationHandler`
-** Maybe a generator for individual handlers that adds that if needed?
+    * Maybe a generator for individual handlers that adds that if needed?
+* Auto reload.
 * Make service hooks more configurable? Apply to one service instead of all?
 * Loosen Rails version requirement? Probably works, but haven't tested. 
 
