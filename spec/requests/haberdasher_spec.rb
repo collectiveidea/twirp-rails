@@ -26,5 +26,19 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
     end
+
+    it "allows a before_action to return a Twirp::Error" do
+      size = Twirp::Example::Haberdasher::Size.new(inches: 12_000)
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf"
+        }
+
+      expect(response.status).to eq(400)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
+    end
   end
 end
