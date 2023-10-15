@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe "Haberdasher Service", type: :request do
-  it "makes a hat" do
+  def make_hat_success_request
     size = Twirp::Example::Haberdasher::Size.new(inches: 24)
 
     post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
@@ -10,6 +10,10 @@ RSpec.describe "Haberdasher Service", type: :request do
         "Content-Type" => "application/protobuf"
       }
     expect(response).to be_successful
+  end
+
+  it "makes a hat" do
+    make_hat_success_request
   end
 
   describe "error handling" do
@@ -74,6 +78,13 @@ RSpec.describe "Haberdasher Service", type: :request do
 
       # In order that events were initialized
       expect(@events.sort_by(&:time).map(&:name)).to contain_exactly("handler_run.twirp_rails", "handler_run_callbacks.twirp_rails")
+    end
+  end
+
+  describe "service hooks" do
+    it "can inject data via a before hook" do
+      expect(IPTracker).to receive(:track).with("127.0.0.1")
+      make_hat_success_request
     end
   end
 end
