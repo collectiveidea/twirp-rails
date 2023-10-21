@@ -66,13 +66,16 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(@events).to contain_exactly(
         have_attributes(name: "handler_run.twirp_rails",
           payload: {
-            handler: an_instance_of(HaberdasherHandler),
+            handler: "HaberdasherHandler",
+            action: "make_hat",
             env: an_instance_of(Hash),
-            request: an_instance_of(Twirp::Example::Haberdasher::Size)
+            request: an_instance_of(Twirp::Example::Haberdasher::Size),
+            response: an_instance_of(Twirp::Example::Haberdasher::Hat)
           }),
         have_attributes(name: "handler_run_callbacks.twirp_rails",
           payload: {
-            handler: an_instance_of(HaberdasherHandler),
+            handler: "HaberdasherHandler",
+            action: "make_hat",
             env: an_instance_of(Hash),
             request: an_instance_of(Twirp::Example::Haberdasher::Size)
           })
