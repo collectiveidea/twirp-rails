@@ -34,9 +34,7 @@ module Twirp
         ActiveSupport::Notifications.instrument("handler_run_callbacks.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do
           run_callbacks(:process_action) do
             ActiveSupport::Notifications.instrument("handler_run.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do |payload|
-              response = send_action(name)
-              payload[:response] = response
-              response
+              payload[:response] = send_action(name)
             end
           end
         end
