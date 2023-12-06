@@ -31,7 +31,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 7.0.0"
   spec.add_dependency "twirp", ">= 1.8.0"
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
 end

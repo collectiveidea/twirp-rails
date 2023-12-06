@@ -5,7 +5,7 @@
 
 ## Motivation
 
-Make serving a [Twirp](https://twitchtv.github.io/twirp/) RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
+Make serving [Twirp](https://twitchtv.github.io/twirp/) RPC Service as easy and familiar as a Rails controller. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
 
 Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, `before_action` and more.
 
@@ -103,15 +103,15 @@ Rails.application.config.twirp.middleware = [Rack::Deflater]
 
 ## Bonus Features
 
-Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.   
+Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.
 
 ### Basic Caching with ETags/If-None-Match Headers
 
-Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) based on the response's content. 
+Like Rails GET actions, Twirp::Rails handlers add [`ETag` headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) based on the response's content.
 
-If you have RPCs can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches. 
+If you have RPCs that can be cached, you can have your Twirp clients send an [`If-None-Match` Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match). Twirp::Rails will return a `304 Not Modified` HTTP status and not re-send the body if the ETag matches.
 
-Enable by adding this to an initializer: 
+Enable by adding this to an initializer:
 
 ```ruby
 Rails.application.config.twirp.middleware = [
@@ -139,7 +139,7 @@ We evaluated all these projects and found them to be bad fits for us, for one re
 * Nice routing abstraction
 * Minimal Handler abstraction
 * Untouched for 4 years
-* Special thanks to [@nikushi](https://github.com/nikushi) for allowing us to take over the [`twirp-rails` gem](http://rubygems.org/gems/twirp-rails) name ( v0.1.1 was this code). Thanks for your inspiration!
+* Special thanks to [@nikushi](https://github.com/nikushi) for allowing us to take over the [`twirp-rails` gem](http://rubygems.org/gems/twirp-rails) name ( v0.1.1 was that repo). Thanks for your inspiration!
 
 [cheddar-me/rails-twirp](https://github.com/cheddar-me/rails-twirp)
 
