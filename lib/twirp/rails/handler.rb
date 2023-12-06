@@ -31,8 +31,12 @@ module Twirp
       # Notice that the first argument is the method to be dispatched
       # which is *not* necessarily the same as the action name.
       def process_action(name)
-        run_callbacks(:process_action) do
-          send_action(name)
+        ActiveSupport::Notifications.instrument("handler_run_callbacks.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do
+          run_callbacks(:process_action) do
+            ActiveSupport::Notifications.instrument("handler_run.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do |payload|
+              payload[:response] = send_action(name)
+            end
+          end
         end
       end
 
