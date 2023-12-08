@@ -5,9 +5,9 @@
 
 ## Motivation
 
-Make serving [Twirp](https://twitchtv.github.io/twirp/) RPC Service as easy and familiar as a Rails controller. Add a few helpful abstractions, but don't hide Twirp, Protobufs, or make it seem too magical.
+Make serving [Twirp](https://twitchtv.github.io/twirp/) RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide [Twirp](https://twitchtv.github.io/twirp/), [Protobufs](https://protobuf.dev), or make it seem too magical.
 
-Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, `before_action` and more.
+Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, use `before_action` and more.
 
 Extracted from a real, production application with many thousands of users.
 
@@ -53,7 +53,7 @@ These are routed to Handlers in `app/handlers/` based on expected naming convent
 
 For example if you have this service defined: 
 
-```
+```protobuf
 service HaberdasherService {
    rpc MakeHat(Size) returns (Hat);
  }
@@ -103,7 +103,7 @@ Rails.application.config.twirp.middleware = [Rack::Deflater]
 
 ## Bonus Features
 
-Outside the Twirp spec, this is some extra magic. They might be useful to you, but you can easily ignore them too.
+Outside the [Twirp spec](https://twitchtv.github.io/twirp/docs/spec_v7.html), we have some (optional) extra magic. They might be useful to you, but you can easily ignore them too.
 
 ### Basic Caching with ETags/If-None-Match Headers
 
