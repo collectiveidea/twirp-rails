@@ -47,7 +47,7 @@ Add one line to your `config/routes.rb` and routes are built automatically from 
 mount Twirp::Rails::Engine, at: "/twirp"
 ```
 
-`/twirp/twirp.example.haberdasher.Haberdasher/MakeHat`
+`/twirp/twirp.example.haberdasher.HaberdasherService/MakeHat`
 
 These are routed to Handlers in `app/handlers/` based on expected naming conventions.
 
