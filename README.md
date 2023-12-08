@@ -54,6 +54,8 @@ These are routed to Handlers in `app/handlers/` based on expected naming convent
 For example if you have this service defined: 
 
 ```protobuf
+package twirp.example.haberdasher;
+
 service HaberdasherService {
    rpc MakeHat(Size) returns (Hat);
  }
