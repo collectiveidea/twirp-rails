@@ -3,7 +3,7 @@
 require_relative "lib/twirp/rails/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "twirp-rails"
+  spec.name = "twirp-on-rails"
   spec.version = Twirp::Rails::VERSION
   spec.authors = ["Daniel Morrison", "Darron Schall"]
   spec.email = ["info@collectiveidea.com"]

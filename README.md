@@ -1,7 +1,7 @@
 [![CI](https://github.com/collectiveidea/twirp-rails/actions/workflows/ci.yml/badge.svg)](https://github.com/collectiveidea/twirp-rails/actions/workflows/ci.yml)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
-# Twirp::Rails
+# Twirp on Rails (Twirp::Rails)
 
 ## Motivation
 
@@ -15,11 +15,11 @@ Extracted from a real, production application with many thousands of users.
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add twirp-rails
+    $ bundle add twirp-on-rails
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install twirp-rails
+    $ gem install twirp-on-rails
 
 ## Usage
 
@@ -141,7 +141,6 @@ We evaluated all these projects and found them to be bad fits for us, for one re
 * Nice routing abstraction
 * Minimal Handler abstraction
 * Untouched for 4 years
-* Special thanks to [@nikushi](https://github.com/nikushi) for allowing us to take over the [`twirp-rails` gem](http://rubygems.org/gems/twirp-rails) name ( v0.1.1 was that repo). Thanks for your inspiration!
 
 [cheddar-me/rails-twirp](https://github.com/cheddar-me/rails-twirp)
 
