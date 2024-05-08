@@ -9,7 +9,7 @@ gem "rake"
 
 gem "debug"
 gem "rspec-rails"
-gem "sqlite3"
+gem "sqlite3", "~> 1.4"
 gem "standard"
 gem "standard-performance"
 gem "standard-rails"
