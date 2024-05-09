@@ -6,21 +6,19 @@
 
 ## Motivation
 
-Make serving [Twirp](https://twitchtv.github.io/twirp/) RPC Services as easy and familiar as Rails controllers. Add a few helpful abstractions, but don't hide [Twirp](https://twitchtv.github.io/twirp/), [Protobufs](https://protobuf.dev), or make it seem too magical.
+Serving [Twirp](https://twitchtv.github.io/twirp/) RPC Services should be as easy and familiar as Rails controllers. We add a few helpful abstractions, but don't hide [Twirp](https://twitchtv.github.io/twirp/), [Protobufs](https://protobuf.dev), or make it seem too magical.
 
-Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) makes it easy to add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, use `before_action` and more.
+Out of the box, the [`twirp` gem](http://github.com/github/twirp-ruby) lets you add [Services](https://github.com/github/twirp-ruby/wiki/Service-Handlers), but it feels clunky coming from Rails REST-ful APIs. We make it simple to build full-featured APIs. Hook in authorization, use `before_action` and more.
 
 Extracted from a real, production application with many thousands of users.
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Install the gem using `gem install twirp-on-rails` or simply add it to your `Gemfile`:
 
-    $ bundle add twirp-on-rails
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install twirp-on-rails
+```
+gem "twirp-on-rails"
+```
 
 ## Usage
 
@@ -29,6 +27,20 @@ Add to your `routes.rb`:
 ```ruby
 mount Twirp::Rails::Engine, at: "/twirp"
 ```
+
+### Generate your `_pb.rb` and `_twirp.rb` files
+
+Generate files [how Twirp-Ruby recommends](https://github.com/arthurnn/twirp-ruby/wiki/Code-Generation). 
+
+Example: 
+
+```bash
+protoc --ruby_out=./lib --twirp_ruby_out=./lib  haberdasher.proto
+```
+
+We (currently) don't add anything to auto-generate files, and have no opinions where you put them. 
+
+Ok, one small opinion: we default to looking in `lib/`, but you can change that.
 
 ### Configuration
 
