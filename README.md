@@ -38,7 +38,7 @@ Example:
 protoc --ruby_out=./lib --twirp_ruby_out=./lib  haberdasher.proto
 ```
 
-We (currently) don't add anything to auto-generate files, and have no opinions where you put them. 
+We (currently) don't run `protoc` for you and have no opinions where you put the generated files. 
 
 Ok, one small opinion: we default to looking in `lib/`, but you can change that.
 
