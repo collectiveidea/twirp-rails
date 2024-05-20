@@ -32,7 +32,7 @@ module Twirp
           when "POST"
             status, headers, body = response = @app.call(env)
             # Rack 3 settles on only allowing lowercase headers
-            if Rack.release < "3.0"
+            if ::Rack.release < "3.0"
               headers = ::Rack::Utils::HeaderHash[headers]
             end
 
@@ -40,7 +40,7 @@ module Twirp
               response[0] = 304
               headers.delete(::Rack::CONTENT_TYPE)
               headers.delete(::Rack::CONTENT_LENGTH)
-              response[2] = Rack::BodyProxy.new([]) do
+              response[2] = ::Rack::BodyProxy.new([]) do
                 body.close if body.respond_to?(:close)
               end
             end
