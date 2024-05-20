@@ -4,5 +4,7 @@ Rails.application.config.twirp.service_hooks[:before] = lambda do |rack_env, env
 end
 
 Rails.application.config.twirp.middleware = [
-  Rack::Deflater
+  Rack::Deflater,
+  Twirp::Rails::Rack::ConditionalPost,
+  Rack::ETag
 ]

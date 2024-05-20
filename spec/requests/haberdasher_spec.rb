@@ -120,4 +120,29 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.headers["Content-Encoding"]).to be_nil
     end
   end
+
+  describe "caching" do
+    it "respects cache headers to return 304 statuses" do
+      size = Twirp::Example::Haberdasher::Size.new(inches: 24)
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf"
+        }
+      expect(response).to be_successful
+      decoded = Twirp::Example::Haberdasher::Hat.decode(response.body)
+      expect(decoded).to be_a(Twirp::Example::Haberdasher::Hat)
+      expect(response.etag).to be_present
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf",
+          "If-None-Match" => response.etag
+        }
+
+      expect(response.status).to eq(304)
+    end
+  end
 end
