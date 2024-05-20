@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rack/conditional_get"
+require "rack/version"
 
 module Twirp
   module Rails
@@ -29,18 +30,21 @@ module Twirp
         def call(env)
           case env[::Rack::REQUEST_METHOD]
           when "POST"
-            status, headers, body = @app.call(env)
-            headers = ::Rack::Utils::HeaderHash[headers]
+            status, headers, body = response = @app.call(env)
+            # Rack 3 settles on only allowing lowercase headers
+            if Rack.release < "3.0"
+              headers = ::Rack::Utils::HeaderHash[headers]
+            end
+
             if status == 200 && fresh?(env, headers)
-              status = 304
+              response[0] = 304
               headers.delete(::Rack::CONTENT_TYPE)
               headers.delete(::Rack::CONTENT_LENGTH)
-              original_body = body
-              body = ::Rack::BodyProxy.new([]) do
-                original_body.close if original_body.respond_to?(:close)
+              response[2] = Rack::BodyProxy.new([]) do
+                body.close if body.respond_to?(:close)
               end
             end
-            [status, headers, body]
+            response
           else
             @app.call(env)
           end
