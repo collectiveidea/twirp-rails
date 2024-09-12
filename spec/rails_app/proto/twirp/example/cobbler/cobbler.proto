@@ -1,5 +1,5 @@
 // A close copy of haberdasher.proto
-// We're putting this in /proto/twirp/example/ so that we can test namespace handling
+// We're putting this in /proto/twirp/example/cobbler/ so that we can test namespace handling
 syntax = "proto3";
 
 package twirp.example.cobbler;
