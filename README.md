@@ -86,7 +86,26 @@ end
 
 Each handler method should return the appropriate Protobuf, or a `Twirp::Error`.
 
-TODO: Give more examples of both
+#### Packages and Namespacing
+
+Handlers can live in directories that reflect the service's package. For example, `haberdasher.proto` defines:
+
+```protobuf
+package twirp.example.haberdasher;
+```
+
+You can use the full path, or because many projects have only one namespace, we also let you skip the namespace for simplicity:
+
+We look for the handler in either location:
+
+`app/handlers/twirp/example/haberdasher/haberdasher_service_handler.rb` defines `Twirp::Example::Haberdasher::HaberdasherServiceHandler`
+
+or
+
+`app/handlers/haberdasher_service_handler.rb` defines `HaberdasherServiceHandler`
+
+
+TODO: Give more examples of handlers
 
 ### Familiar Callbacks
 
