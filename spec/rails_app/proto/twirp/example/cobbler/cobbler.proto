@@ -1,0 +1,23 @@
+// A close copy of haberdasher.proto
+// We're putting this in /proto/twirp/example/cobbler/ so that we can test namespace handling
+syntax = "proto3";
+
+package twirp.example.cobbler;
+
+// Cobbler service makes shoes for clients.
+service Cobbler {
+  // MakeShoe produces a shoe of mysterious, randomly-selected color!
+  rpc MakeShoe(Size) returns (Shoe);
+}
+
+// Size of a Shoe, in inches.
+message Size {
+  int32 inches = 1; // must be > 0
+}
+
+// A Shoe is a piece of footwear made by a Cobbler.
+message Shoe {
+  int32 inches = 1;
+  string color = 2; // anything but "invisible"
+  string name = 3; // i.e. "oxford"
+}
