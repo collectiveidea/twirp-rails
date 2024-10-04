@@ -111,6 +111,22 @@ TODO: Give more examples of handlers
 
 Use `before_action`, `around_action`, and other callbacks you're used to, as we build on [AbstractController::Callbacks](https://api.rubyonrails.org/classes/AbstractController/Callbacks.html).
 
+### rescue_from
+
+Use `rescue_from` just like you would in a controller: 
+
+```ruby
+class HaberdasherServiceHandler < Twirp::Rails::Handler
+  rescue_from "ArgumentError" do |error|
+    Twirp::Error.invalid_argument(error.message)
+  end
+
+  rescue_from "Pundit::NotAuthorizedError", :not_authorized
+
+  ...
+end
+```
+
 ### DRY Service Hooks
 
 Apply [Service Hooks](https://github.com/twitchtv/twirp-ruby/wiki/Service-Hooks) one time across multiple services.
