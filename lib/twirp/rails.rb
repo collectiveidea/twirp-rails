@@ -15,6 +15,7 @@ require_relative "rails/callbacks"
 require_relative "rails/configuration"
 require_relative "rails/dispatcher"
 require_relative "rails/engine"
+require_relative "rails/rescuable"
 require_relative "rails/handler"
 
 module Twirp

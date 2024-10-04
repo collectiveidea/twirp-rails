@@ -3,6 +3,10 @@ class HaberdasherHandler < Twirp::Rails::Handler
   before_action :track_request_ip
   before_action :reject_giant_hats
 
+  rescue_from "ArgumentError" do |error|
+    Twirp::Error.invalid_argument(error.message)
+  end
+
   def make_hat
     # We can return a Twirp::Error when appropriate
     if request.inches < 12

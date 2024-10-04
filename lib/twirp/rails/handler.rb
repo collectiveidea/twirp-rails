@@ -4,6 +4,8 @@ module Twirp
   module Rails
     class Handler
       include Twirp::Rails::Callbacks
+      include ActiveSupport::Rescuable
+      using Twirp::Rails::Rescuable
 
       attr_reader :request, :env
       attr_reader :action_name
@@ -34,7 +36,11 @@ module Twirp
         ActiveSupport::Notifications.instrument("handler_run_callbacks.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do
           run_callbacks(:process_action) do
             ActiveSupport::Notifications.instrument("handler_run.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do |payload|
-              payload[:response] = send_action(name)
+              payload[:response] = begin
+                send_action(name)
+              rescue => exception
+                rescue_with_handler_and_return(exception) || raise
+              end
             end
           end
         end
