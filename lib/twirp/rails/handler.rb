@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "rescuable" # Ruby 2.7 fails without this. Remove eventually.
+
 module Twirp
   module Rails
     class Handler
