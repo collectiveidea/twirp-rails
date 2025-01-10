@@ -21,4 +21,10 @@ Twirp::Service.class_eval do
     handler ||= Twirp::Rails::Dispatcher.new(self.class)
     original_initialize(handler)
   end
+
+  # Override inspect to show all available RPCs
+  # This is used when displaying routes.
+  def inspect
+    self.class.rpcs.map { |rpc| "#{self.class.name.demodulize.underscore}_handler##{rpc[1][:ruby_method]}" }.join("\n")
+  end
 end

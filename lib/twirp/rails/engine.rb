@@ -54,11 +54,3 @@ module Twirp
     end
   end
 end
-
-class Twirp::Service
-  # Override inspect to show all available RPCs
-  # This is used when displaying routes.
-  def inspect
-    self.class.rpcs.map { |rpc| "#{self.class.name.demodulize.underscore}_handler##{rpc[1][:ruby_method]}" }.join("\n")
-  end
-end
