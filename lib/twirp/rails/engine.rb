@@ -49,18 +49,18 @@ module Twirp
                     },
             on_success: proc { |env|
                           request_time = duration_in_ms(env[:request_start_time])
-                          ::Rails.logger.info("Twirp 200 in #{request_time}ms")
+                          ::Rails.logger.info("Twirp success in #{request_time}ms")
                           env
                         },
             on_error: proc { |error, env|
               request_time = duration_in_ms(env[:request_start_time])
               http_code = Twirp::ERROR_CODES_TO_HTTP_STATUS[error.code]
-              ::Rails.logger.info("Twirp #{http_code} in #{request_time}ms (#{error.code}: #{error.msg} - #{error.meta})")
+              ::Rails.logger.info("Twirp #{error.code} (#{http_code}) in #{request_time}ms (#{error.code}: #{error.msg} - #{error.meta})")
               [error, env]
             },
             exception_raised: proc { |exception, env|
               request_time = duration_in_ms(env[:request_start_time])
-              ::Rails.logger.info("Twirp 500 in #{request_time}ms (#{exception.class}: #{exception.message})")
+              ::Rails.logger.info("Twirp exception (500) in #{request_time}ms (#{exception.class}: #{exception.message})")
               [exception, env]
             }
           }

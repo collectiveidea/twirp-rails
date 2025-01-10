@@ -20,7 +20,7 @@ RSpec.describe "Haberdasher Service", type: :request do
 
   it "makes a hat" do
     make_hat_success_request
-    expect(::Rails.logger).to have_received(:info).with("Twirp 200 in 0ms")
+    expect(::Rails.logger).to have_received(:info).with("Twirp success in 0ms")
   end
 
   describe "error handling" do
@@ -37,7 +37,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
 
-      expect(::Rails.logger).to have_received(:info).with('Twirp 400 in 0ms (invalid_argument: is too small - {:argument=>"inches"})')
+      expect(::Rails.logger).to have_received(:info).with('Twirp invalid_argument (400) in 0ms (invalid_argument: is too small - {:argument=>"inches"})')
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -53,7 +53,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
 
-      expect(::Rails.logger).to have_received(:info).with('Twirp 400 in 0ms (invalid_argument: is too big - {:argument=>"inches"})')
+      expect(::Rails.logger).to have_received(:info).with('Twirp invalid_argument (400) in 0ms (invalid_argument: is too big - {:argument=>"inches"})')
     end
 
     it "deals with unhandled exceptions" do
@@ -69,7 +69,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
 
-      expect(::Rails.logger).to have_received(:info).with("Twirp 500 in 0ms (RuntimeError: Contrived Example Error)")
+      expect(::Rails.logger).to have_received(:info).with("Twirp exception (500) in 0ms (RuntimeError: Contrived Example Error)")
     end
   end
 
