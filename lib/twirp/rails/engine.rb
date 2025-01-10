@@ -42,15 +42,53 @@ module Twirp
         if @services.nil?
           @services = Twirp::Service.subclasses.map(&:new)
 
+          logging_hooks = {
+            before: proc { |rack_env, env|
+                      env[:request_start_time] = Time.current
+                      [rack_env, env]
+                    },
+            on_success: proc { |env|
+                          request_time = duration_in_ms(env[:request_start_time])
+                          ::Rails.logger.info("Twirp 200 in #{request_time}ms")
+                          env
+                        },
+            on_error: proc { |error, env|
+              request_time = duration_in_ms(env[:request_start_time])
+              http_code = Twirp::ERROR_CODES_TO_HTTP_STATUS[error.code]
+              ::Rails.logger.info("Twirp #{http_code} in #{request_time}ms (#{error.code}: #{error.msg} - #{error.meta})")
+              [error, env]
+            },
+            exception_raised: proc { |exception, env|
+              request_time = duration_in_ms(env[:request_start_time])
+              ::Rails.logger.info("Twirp 500 in #{request_time}ms (#{exception.class}: #{exception.message})")
+              [exception, env]
+            }
+          }
+
           # Install hooks that may be defined in the config
+          hook_names = [:before, :on_success, :on_error, :exception_raised].freeze
           @services.each do |service|
-            ::Rails.application.config.twirp.service_hooks.each do |hook_name, hook|
-              service.send(hook_name, &hook)
+            hook_names.each do |hook_name|
+              hook = ::Rails.application.config.twirp.service_hooks[hook_name]
+              if hook
+                # Lambda compositions with array returns is weird. Avoid it.
+                raise "Define your #{hook_name} hook as a proc, not a lambda." if hook.lambda?
+
+                # Compose user hook with logging hook to run both
+                composition = logging_hooks[hook_name] >> hook
+                service.send(hook_name, &composition)
+              else
+                service.send(hook_name, &logging_hooks[hook_name])
+              end
             end
           end
         end
 
         @services
+      end
+
+      def duration_in_ms(time)
+        ((Time.current - time) * 1000).to_i
       end
     end
   end

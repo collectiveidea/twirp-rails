@@ -1,6 +1,10 @@
 require "spec_helper"
 
 RSpec.describe "Haberdasher Service", type: :request do
+  before do
+    allow(::Rails.logger).to receive(:info).and_call_original
+  end
+
   def make_hat_success_request
     size = Twirp::Example::Haberdasher::Size.new(inches: 24)
 
@@ -16,6 +20,7 @@ RSpec.describe "Haberdasher Service", type: :request do
 
   it "makes a hat" do
     make_hat_success_request
+    expect(::Rails.logger).to have_received(:info).with("Twirp 200 in 0ms")
   end
 
   describe "error handling" do
@@ -31,6 +36,8 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.status).to eq(400)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
+
+      expect(::Rails.logger).to have_received(:info).with('Twirp 400 in 0ms (invalid_argument: is too small - {:argument=>"inches"})')
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -45,6 +52,24 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.status).to eq(400)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
+
+      expect(::Rails.logger).to have_received(:info).with('Twirp 400 in 0ms (invalid_argument: is too big - {:argument=>"inches"})')
+    end
+
+    it "deals with unhandled exceptions" do
+      size = Twirp::Example::Haberdasher::Size.new(inches: 1_234) # Special size that raises an exception
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf"
+        }
+
+      expect(response.status).to eq(500)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
+
+      expect(::Rails.logger).to have_received(:info).with("Twirp 500 in 0ms (RuntimeError: Contrived Example Error)")
     end
   end
 
