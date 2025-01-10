@@ -44,14 +44,14 @@ module Twirp
 
           logging_hooks = {
             before: proc { |rack_env, env|
-                      env[:request_start_time] = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
-                      [rack_env, env]
-                    },
+              env[:request_start_time] = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
+              [rack_env, env]
+            },
             on_success: proc { |env|
-                          request_time = duration_in_ms(env[:request_start_time])
-                          ::Rails.logger.info("Twirp success in #{request_time}ms")
-                          env
-                        },
+              request_time = duration_in_ms(env[:request_start_time])
+              ::Rails.logger.info("Twirp success in #{request_time}ms")
+              env
+            },
             on_error: proc { |error, env|
               request_time = duration_in_ms(env[:request_start_time])
               http_code = Twirp::ERROR_CODES_TO_HTTP_STATUS[error.code]
