@@ -44,7 +44,7 @@ module Twirp
 
           logging_hooks = {
             before: proc { |rack_env, env|
-                      env[:request_start_time] = Time.current
+                      env[:request_start_time] = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
                       [rack_env, env]
                     },
             on_success: proc { |env|
@@ -88,7 +88,7 @@ module Twirp
       end
 
       def duration_in_ms(time)
-        ((Time.current - time) * 1000).to_i
+        ((::Process.clock_gettime(::Process::CLOCK_MONOTONIC) - time) * 1000).to_i
       end
     end
   end
