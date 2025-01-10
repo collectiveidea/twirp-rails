@@ -7,6 +7,8 @@ gemspec
 
 gem "rake"
 
+gem "rails", "~> #{ENV["RAILS_VERSION"] || "8.0"}"
+
 gem "debug"
 gem "rspec-rails"
 gem "standard", ">= 1.35.1"
