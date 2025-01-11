@@ -170,6 +170,8 @@ Rails.application.config.twirp.middleware = [
 ]
 ```
 
+Note: The Handler will still be run, but you won't need to send back the response. Make sure your RPC is idempotent! Future versions hope to make it easier to short-circuit expensive parts of the handler. 
+
 ## TODO
 
 * More docs!

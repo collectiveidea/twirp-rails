@@ -9,7 +9,11 @@ gem "rake"
 
 gem "debug"
 gem "rspec-rails"
-gem "sqlite3", "~> 1.4"
 gem "standard", ">= 1.35.1"
 gem "standard-performance"
 gem "standard-rails"
+
+# These standard library gems need to be here for with certain Rails 7/Ruby 3.4 combinations. Delete eventually.
+gem "mutex_m"
+gem "bigdecimal"
+gem "drb"

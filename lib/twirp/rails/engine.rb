@@ -29,16 +29,17 @@ module Twirp
         app.config.twirp.middleware.each do |middleware|
           app.config.middleware.use middleware
         end
+
+        # Load all Twirp files
+        app.config.twirp.load_paths.each do |directory|
+          ::Rails.root.glob("#{directory}/**/*_twirp.rb").sort.each { |file| require file }
+        end
       end
     end
 
     class << self
       def services
         if @services.nil?
-          ::Rails.application.config.twirp.load_paths.each do |directory|
-            ::Rails.root.glob("#{directory}/**/*_twirp.rb").sort.each { |file| require file }
-          end
-
           @services = Twirp::Service.subclasses.map(&:new)
 
           # Install hooks that may be defined in the config
@@ -52,13 +53,5 @@ module Twirp
         @services
       end
     end
-  end
-end
-
-class Twirp::Service
-  # Override inspect to show all available RPCs
-  # This is used when displaying routes.
-  def inspect
-    self.class.rpcs.map { |rpc| "#{self.class.name.demodulize.underscore}_handler##{rpc[1][:ruby_method]}" }.join("\n")
   end
 end
