@@ -3,6 +3,7 @@ require "spec_helper"
 RSpec.describe "Haberdasher Service", type: :request do
   before do
     allow(::Rails.logger).to receive(:info).and_call_original
+    allow(::Rails.logger).to receive(:debug).and_call_original
   end
 
   def make_hat_success_request
@@ -20,7 +21,8 @@ RSpec.describe "Haberdasher Service", type: :request do
 
   it "makes a hat" do
     make_hat_success_request
-    expect(::Rails.logger).to have_received(:info).with("Twirp success in 0ms")
+    expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \dms as application\/protobuf/)
+    expect(::Rails.logger).to have_received(:debug).with("\b\x18\x12\x03Tan\x1A\bPork Pie")
   end
 
   describe "error handling" do
@@ -37,7 +39,8 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
 
-      expect(::Rails.logger).to have_received(:info).with("Twirp invalid_argument (400) in 0ms (invalid_argument: is too small - #{{argument: "inches"}})")
+      expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \dms as application\/json/)
+      expect(::Rails.logger).to have_received(:debug).with('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -53,7 +56,8 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
 
-      expect(::Rails.logger).to have_received(:info).with("Twirp invalid_argument (400) in 0ms (invalid_argument: is too big - #{{argument: "inches"}})")
+      expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \dms as application\/json/)
+      expect(::Rails.logger).to have_received(:debug).with('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
     end
 
     it "deals with unhandled exceptions" do
@@ -69,7 +73,8 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
 
-      expect(::Rails.logger).to have_received(:info).with("Twirp exception (500) in 0ms (RuntimeError: Contrived Example Error)")
+      expect(::Rails.logger).to have_received(:info).with(/Twirp 500 in \dms as application\/json/)
+      expect(::Rails.logger).to have_received(:debug).with('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
     end
   end
 
