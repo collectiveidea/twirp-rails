@@ -26,10 +26,10 @@ module Twirp
           app.config.twirp.send(key)
         end
 
+        app.config.middleware.use app.config.twirp.logger, ::Rails.logger
         app.config.twirp.middleware.each do |middleware|
           app.config.middleware.use middleware
         end
-        app.config.middleware.use Logger
 
         # Load all Twirp files
         app.config.twirp.load_paths.each do |directory|
