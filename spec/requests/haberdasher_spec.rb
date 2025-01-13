@@ -136,7 +136,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.headers["vary"]).to eq("Accept-Encoding")
       expect(response.headers["content-encoding"]).to eq("gzip")
 
-      expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf/)
+      expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf with content-encoding: gzip/)
       expect(::Rails.logger).not_to have_received(:debug) # No debug output when gzipped
     end
 
