@@ -22,7 +22,7 @@ RSpec.describe "Haberdasher Service", type: :request do
   it "makes a hat" do
     make_hat_success_request
     expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf/)
-    expect(::Rails.logger).to have_received(:debug).with("Twirp Response: \b\x18\x12\x03Tan\x1A\bPork Pie")
+    expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">')
   end
 
   describe "error handling" do
@@ -40,7 +40,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: {"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:invalid_argument msg:"is too small" meta:{argument: "inches"}>')
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -57,7 +57,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: {"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:invalid_argument msg:"is too big" meta:{argument: "inches"}>')
     end
 
     it "deals with unhandled exceptions" do
@@ -74,7 +74,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 500 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: {"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:internal msg:"Contrived Example Error" meta:{cause: "RuntimeError"}>')
     end
   end
 
@@ -137,7 +137,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.headers["content-encoding"]).to eq("gzip")
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf with content-encoding: gzip/)
-      expect(::Rails.logger).not_to have_received(:debug) # No debug output when gzipped
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">')
     end
 
     it "ignores injected middleware when inappropriate" do
@@ -168,6 +168,8 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(decoded).to be_a(Twirp::Example::Haberdasher::Hat)
       expect(response.etag).to be_present
 
+      expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf/)
+
       post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
         params: size.to_proto, headers: {
           :accept => "application/protobuf",
@@ -177,7 +179,7 @@ RSpec.describe "Haberdasher Service", type: :request do
 
       expect(response.status).to eq(304)
       expect(::Rails.logger).to have_received(:info).with(/Twirp 304 in \d+ms/)
-      expect(::Rails.logger).to have_received(:debug).with("Twirp Response: \b\x18\x12\x03Tan\x1A\bPork Pie")
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">').twice # once from before, once for the 304
     end
   end
 

@@ -45,8 +45,24 @@ module Twirp
 
           # Install hooks that may be defined in the config
           @services.each do |service|
+            # Add user-defined hooks
             ::Rails.application.config.twirp.service_hooks.each do |hook_name, hook|
               service.send(hook_name, &hook)
+            end
+
+            # Add our own logging hooks in debug mode
+            if ::Rails.logger.level == ::Logger::DEBUG
+              service.on_success do |env|
+                ::Rails.logger.debug("Twirp Response: #{env[:output].inspect}")
+              end
+
+              service.on_error do |error, _env|
+                ::Rails.logger.debug("Twirp Response: #{error.inspect}")
+              end
+
+              service.exception_raised do |exception, _env|
+                ::Rails.logger.debug("Twirp Exception (#{exception.class}: #{exception.message})\n#{exception.backtrace.join("\n")}")
+              end
             end
           end
         end
