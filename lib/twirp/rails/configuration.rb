@@ -12,6 +12,11 @@ module Twirp
       # Logger to use for Twirp requests. Defaults to Rails.logger
       attr_accessor :logger
 
+      # Whether to log Twirp responses. Defaults to true if log level is :debug
+      # Example:
+      #   Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">
+      attr_accessor :verbose_logging
+
       # An array of directories to search for *_twirp.rb files
       # Defaults to ["lib"]
       attr_accessor :load_paths
@@ -29,6 +34,7 @@ module Twirp
         @endpoint = "/twirp"
         @load_paths = ["lib"]
         @logger = Logger
+        @verbose_logging = nil
         @middleware = []
         @service_hooks = {}
       end

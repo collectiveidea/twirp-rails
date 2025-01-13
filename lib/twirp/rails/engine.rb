@@ -26,7 +26,10 @@ module Twirp
           app.config.twirp.send(key)
         end
 
+        # Set up logging
         app.config.middleware.use app.config.twirp.logger, ::Rails.logger
+        app.config.twirp.verbose_logging = ::Rails.logger.level == ::Logger::DEBUG if app.config.twirp.verbose_logging.nil?
+
         app.config.twirp.middleware.each do |middleware|
           app.config.middleware.use middleware
         end
@@ -50,8 +53,8 @@ module Twirp
               service.send(hook_name, &hook)
             end
 
-            # Add our own logging hooks in debug mode
-            if ::Rails.logger.level == ::Logger::DEBUG
+            # Add our own logging hooks if verbose_logging is enabled
+            if ::Rails.application.config.twirp.verbose_logging
               service.on_success do |env|
                 ::Rails.logger.debug("Twirp Response: #{env[:output].inspect}")
               end
