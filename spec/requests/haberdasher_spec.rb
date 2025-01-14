@@ -40,7 +40,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:invalid_argument msg:"is too small" meta:{argument: "inches"}>')
+      expect(::Rails.logger).to have_received(:debug).with("Twirp Response: <Twirp::Error code:invalid_argument msg:\"is too small\" meta:#{{argument: "inches"}}>") # standard:disable Lint/LiteralInInterpolation
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -57,7 +57,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 400 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:invalid_argument msg:"is too big" meta:{argument: "inches"}>')
+      expect(::Rails.logger).to have_received(:debug).with("Twirp Response: <Twirp::Error code:invalid_argument msg:\"is too big\" meta:#{{argument: "inches"}}>") # standard:disable Lint/LiteralInInterpolation
     end
 
     it "deals with unhandled exceptions" do
@@ -74,7 +74,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 500 in \d+ms as application\/json/)
-      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Error code:internal msg:"Contrived Example Error" meta:{cause: "RuntimeError"}>')
+      expect(::Rails.logger).to have_received(:debug).with("Twirp Response: <Twirp::Error code:internal msg:\"Contrived Example Error\" meta:#{{cause: "RuntimeError"}}>") # standard:disable Lint/LiteralInInterpolation
     end
   end
 
@@ -169,6 +169,7 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.etag).to be_present
 
       expect(::Rails.logger).to have_received(:info).with(/Twirp 200 in \d+ms as application\/protobuf/)
+      expect(::Rails.logger).to have_received(:debug).with('Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">')
 
       post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
         params: size.to_proto, headers: {
