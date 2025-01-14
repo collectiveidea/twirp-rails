@@ -153,7 +153,15 @@ Rails.application.config.twirp.middleware = [Rack::Deflater]
 
 ### Logging
 
-Our built-in logging outputs the result of each request. Additionally, you can output the Twirp object to help with debugging: 
+Our built-in logging outputs the result of each request. 
+
+You could replace our logger if you want different output: 
+
+```ruby
+Rails.application.config.twirp.logger = Rack::CommonLogger
+```
+
+Additionally, you can log the Twirp response object to help with debugging: 
 
 ```ruby
 # Defaults to true if your log_level is :debug
