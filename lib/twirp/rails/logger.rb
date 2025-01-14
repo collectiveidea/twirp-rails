@@ -20,7 +20,7 @@ module Twirp
       def log(env, status, response_headers, began_at)
         content_type = response_headers["content-type"].presence
         content_encoding = response_headers["content-encoding"].presence
-        @logger.info("Twirp #{status} in #{duration_in_ms(began_at)}ms#{" as #{content_type}" if content_type}#{" with content-encoding: #{content_encoding}" if content_encoding}")
+        @logger.info { "Twirp #{status} in #{duration_in_ms(began_at)}ms#{" as #{content_type}" if content_type}#{" with content-encoding: #{content_encoding}" if content_encoding}" }
       end
 
       def duration_in_ms(time)

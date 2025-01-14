@@ -53,19 +53,19 @@ module Twirp
               service.send(hook_name, &hook)
             end
 
-            # Add our own logging hooks if verbose_logging is enabled
-            if ::Rails.application.config.twirp.verbose_logging
-              service.on_success do |env|
-                ::Rails.logger.debug("Twirp Response: #{env[:output].inspect}")
+            # Add our own logging hooks
+            service.on_success do |env|
+              if ::Rails.application.config.twirp.verbose_logging
+                ::Rails.logger.debug { "Twirp Response: #{env[:output].inspect}" }
               end
+            end
 
-              service.on_error do |error, _env|
-                ::Rails.logger.debug("Twirp Response: #{error.inspect}")
-              end
+            service.on_error do |error, _env|
+              ::Rails.logger.debug { "Twirp Response: #{error.inspect}" }
+            end
 
-              service.exception_raised do |exception, _env|
-                ::Rails.logger.debug("Twirp Exception (#{exception.class}: #{exception.message})\n#{exception.backtrace.join("\n")}")
-              end
+            service.exception_raised do |exception, _env|
+              ::Rails.logger.error { "Twirp Exception (#{exception.class}: #{exception.message})\n#{exception.backtrace.join("\n")}" }
             end
           end
         end
