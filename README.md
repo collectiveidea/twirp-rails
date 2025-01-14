@@ -161,10 +161,9 @@ You could replace our logger if you want different output:
 Rails.application.config.twirp.logger = Rack::CommonLogger
 ```
 
-Additionally, you can log the Twirp response object to help with debugging: 
+Additionally, you can log the full Twirp response object to help with debugging: 
 
 ```ruby
-# Defaults to true if your log_level is :debug
 Rails.application.config.twirp.verbose_logging = true
 ```
 

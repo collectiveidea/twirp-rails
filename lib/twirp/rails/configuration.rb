@@ -12,7 +12,8 @@ module Twirp
       # Logger to use for Twirp requests. Defaults to Rails.logger
       attr_accessor :logger
 
-      # Whether to log Twirp responses. Defaults to true if log level is :debug
+      # Whether to log full Twirp responses. Can be useful for debugging, but can expose sensitive data.
+      # Defauts to false
       # Example:
       #   Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">
       attr_accessor :verbose_logging
@@ -34,7 +35,7 @@ module Twirp
         @endpoint = "/twirp"
         @load_paths = ["lib"]
         @logger = Logger
-        @verbose_logging = nil
+        @verbose_logging = false
         @middleware = []
         @service_hooks = {}
       end

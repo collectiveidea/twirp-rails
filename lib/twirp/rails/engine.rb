@@ -28,8 +28,6 @@ module Twirp
 
         # Set up logging
         app.config.middleware.use app.config.twirp.logger, ::Rails.logger
-        app.config.twirp.verbose_logging = ::Rails.logger.level == ::Logger::DEBUG if app.config.twirp.verbose_logging.nil?
-
         app.config.twirp.middleware.each do |middleware|
           app.config.middleware.use middleware
         end
