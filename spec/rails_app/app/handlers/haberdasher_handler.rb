@@ -31,6 +31,11 @@ class HaberdasherHandler < Twirp::Rails::Handler
 
   # contrived example of using a before_action
   def reject_giant_hats
+    # This specific size raises an un-rescued error
+    if request.inches == 1_234
+      raise "Contrived Example Error"
+    end
+
     if request.inches >= 1_000
       Twirp::Error.invalid_argument("is too big", argument: "inches")
     end

@@ -1,6 +1,13 @@
 require "spec_helper"
 
 RSpec.describe "Haberdasher Service", type: :request do
+  let!(:log) { StringIO.new }
+
+  before do
+    ::Rails.logger.broadcast_to(::Logger.new(log))
+    allow(log).to receive(:write).and_call_original
+  end
+
   def make_hat_success_request
     size = Twirp::Example::Haberdasher::Size.new(inches: 24)
 
@@ -16,6 +23,8 @@ RSpec.describe "Haberdasher Service", type: :request do
 
   it "makes a hat" do
     make_hat_success_request
+    expect(log).to have_received(:write).with(/INFO -- : Twirp 200 in \dms as application\/protobuf/)
+    expect(log).to have_received(:write).with(a_string_matching("DEBUG -- : Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: \"Tan\", name: \"Pork Pie\">"))
   end
 
   describe "error handling" do
@@ -31,6 +40,9 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.status).to eq(400)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too small","meta":{"argument":"inches"}}')
+
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 400 in \d+ms as application\/json/)
+      expect(log).to have_received(:write).with(a_string_matching("DEBUG -- : Twirp Response: <Twirp::Error code:invalid_argument msg:\"is too small\" meta:#{{argument: "inches"}}>")) # standard:disable Lint/LiteralInInterpolation
     end
 
     it "allows a before_action to return a Twirp::Error" do
@@ -45,6 +57,27 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.status).to eq(400)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is too big","meta":{"argument":"inches"}}')
+
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 400 in \d+ms as application\/json/)
+      expect(log).to have_received(:write).with(a_string_matching("DEBUG -- : Twirp Response: <Twirp::Error code:invalid_argument msg:\"is too big\" meta:#{{argument: "inches"}}>")) # standard:disable Lint/LiteralInInterpolation
+    end
+
+    it "deals with unhandled exceptions" do
+      size = Twirp::Example::Haberdasher::Size.new(inches: 1_234) # Special size that raises an exception
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf"
+        }
+
+      expect(response.status).to eq(500)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to eq('{"code":"internal","msg":"Contrived Example Error","meta":{"cause":"RuntimeError"}}')
+
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 500 in \d+ms as application\/json/)
+      expect(log).to have_received(:write).with(/ERROR -- : Twirp Exception \(RuntimeError: Contrived Example Error\)\n.*in.*reject_giant_hats'/)
+      expect(log).to have_received(:write).with(a_string_matching("DEBUG -- : Twirp Response: <Twirp::Error code:internal msg:\"Contrived Example Error\" meta:#{{cause: "RuntimeError"}}>")) # standard:disable Lint/LiteralInInterpolation
     end
   end
 
@@ -103,8 +136,11 @@ RSpec.describe "Haberdasher Service", type: :request do
           "Content-Type" => "application/protobuf",
           "Accept-Encoding" => "gzip" # ask for GZIP encoding
         }
-      expect(response.headers["Vary"]).to eq("Accept-Encoding")
-      expect(response.headers["Content-Encoding"]).to eq("gzip")
+      expect(response.headers["vary"]).to eq("Accept-Encoding")
+      expect(response.headers["content-encoding"]).to eq("gzip")
+
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 200 in \d+ms as application\/protobuf with content-encoding: gzip/)
+      expect(log).to have_received(:write).with(a_string_matching('DEBUG -- : Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">'))
     end
 
     it "ignores injected middleware when inappropriate" do
@@ -135,6 +171,9 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(decoded).to be_a(Twirp::Example::Haberdasher::Hat)
       expect(response.etag).to be_present
 
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 200 in \d+ms as application\/protobuf/)
+      expect(log).to have_received(:write).with(a_string_matching('DEBUG -- : Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">'))
+
       post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
         params: size.to_proto, headers: {
           :accept => "application/protobuf",
@@ -143,6 +182,8 @@ RSpec.describe "Haberdasher Service", type: :request do
         }
 
       expect(response.status).to eq(304)
+      expect(log).to have_received(:write).with(/INFO -- : Twirp 304 in \d+ms/)
+      expect(log).to have_received(:write).with(a_string_matching('DEBUG -- : Twirp Response: <Twirp::Example::Haberdasher::Hat: inches: 24, color: "Tan", name: "Pork Pie">')).twice # once from before, once for the 304
     end
   end
 

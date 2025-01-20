@@ -151,6 +151,22 @@ As an Engine, we avoid all the standard Rails middleware. That's nice for simpli
 Rails.application.config.twirp.middleware = [Rack::Deflater]
 ```
 
+### Logging
+
+Our built-in logging outputs the result of each request. 
+
+You could replace our logger if you want different output: 
+
+```ruby
+Rails.application.config.twirp.logger = Rack::CommonLogger
+```
+
+Additionally, you can log the full Twirp response object to help with debugging: 
+
+```ruby
+Rails.application.config.twirp.verbose_logging = true
+```
+
 ## Bonus Features
 
 Outside the [Twirp spec](https://twitchtv.github.io/twirp/docs/spec_v7.html), we have some (optional) extra magic. They might be useful to you, but you can easily ignore them too.
