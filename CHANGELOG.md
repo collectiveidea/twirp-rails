@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.4.0] - 2025-01-28
+
+- Fix middleware to not apply where it isn't expected. 
+
 ## [1.3.0] - 2025-01-20
 
 - Add some logging.
