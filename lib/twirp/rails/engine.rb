@@ -27,9 +27,9 @@ module Twirp
         end
 
         # Set up logging
-        app.config.middleware.use app.config.twirp.logger, ::Rails.logger
-        app.config.twirp.middleware.each do |middleware|
-          app.config.middleware.use middleware
+        middleware.use app.config.twirp.logger, ::Rails.logger
+        app.config.twirp.middleware.each do |user_middleware|
+          middleware.use user_middleware
         end
 
         # Load all Twirp files
