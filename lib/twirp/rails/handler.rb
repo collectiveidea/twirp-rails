@@ -7,6 +7,7 @@ module Twirp
     class Handler
       include Twirp::Rails::Callbacks
       include ActiveSupport::Rescuable
+
       using Twirp::Rails::Rescuable
 
       attr_reader :request, :env
