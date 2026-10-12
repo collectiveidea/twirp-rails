@@ -39,13 +39,11 @@ module Twirp
         ActiveSupport::Notifications.instrument("handler_run_callbacks.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do
           run_callbacks(:process_action) do
             ActiveSupport::Notifications.instrument("handler_run.twirp_rails", handler: self.class.name, action: action_name, env: @env, request: @request) do |payload|
-              payload[:response] = begin
-                send_action(name)
-              rescue => exception
-                rescue_with_handler_and_return(exception) || raise
-              end
+              payload[:response] = send_action(name)
             end
           end
+        rescue => exception
+          rescue_with_handler_and_return(exception) || raise
         end
       end
 

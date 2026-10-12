@@ -18,6 +18,19 @@ RSpec.describe Twirp::Rails::Handler do
   end
 
   describe "rescue_from" do
+    it "rescues an exception raised in the action, skipping the callbacks after it" do
+      ran = []
+      handler_class.around_action do |_handler, action|
+        action.call
+        ran << :around_action
+      end
+      handler_class.after_action { ran << :after_action }
+      handler_class.define_method(:make_hat) { raise ArgumentError, "from the action" }
+
+      expect(make_hat).to have_attributes(code: :invalid_argument, msg: "from the action")
+      expect(ran).to be_empty
+    end
+
     it "rescues an exception raised in a before_action" do
       handler_class.before_action { raise ArgumentError, "from a before_action" }
 
