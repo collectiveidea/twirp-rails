@@ -1,4 +1,5 @@
 require "spec_helper"
+require "ip_tracker"
 
 RSpec.describe "Haberdasher Service", type: :request do
   let!(:log) { StringIO.new }
