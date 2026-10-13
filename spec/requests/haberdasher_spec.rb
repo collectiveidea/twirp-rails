@@ -1,4 +1,5 @@
 require "spec_helper"
+require "ip_tracker"
 
 RSpec.describe "Haberdasher Service", type: :request do
   let!(:log) { StringIO.new }
@@ -203,6 +204,23 @@ RSpec.describe "Haberdasher Service", type: :request do
       expect(response.status).to eq(400)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to eq('{"code":"invalid_argument","msg":"is way too large"}')
+    end
+
+    it "rescues from ArgumentError raised in a before_action" do
+      size = Twirp::Example::Haberdasher::Size.new(inches: 24)
+
+      # Fake an exception in the track_request_ip before_action
+      expect(IPTracker).to receive(:track).and_raise(ArgumentError.new("is from nowhere"))
+
+      post "/twirp/twirp.example.haberdasher.Haberdasher/MakeHat",
+        params: size.to_proto, headers: {
+          :accept => "application/protobuf",
+          "Content-Type" => "application/protobuf"
+        }
+
+      expect(response.status).to eq(400)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to eq('{"code":"invalid_argument","msg":"is from nowhere"}')
     end
   end
 end
