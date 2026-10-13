@@ -15,7 +15,7 @@ module Twirp
             if visited_exceptions.include?(exception.cause)
               nil
             else
-              rescue_with_handler(exception.cause, object: object, visited_exceptions: visited_exceptions)
+              rescue_with_handler_and_return(exception.cause, object: object, visited_exceptions: visited_exceptions)
             end
           end
         end
