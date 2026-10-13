@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-13
+
+- rescue_from now handles exceptions raised in before/around/after_action callbacks. When the action raises, after_action callbacks no longer run, matching controllers.
+- rescue_from handlers that match an exception's cause now return the handler's result instead of the cause.
+
 ## [1.4.0] - 2025-01-28
 
 - Fix middleware to not apply where it isn't expected. 
